@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "greetingcard"
 include(":app")
+include(":learntogethertext")
