@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TodoApp</string>
+    <string name="welcome">Welcome Back \uD83D\uDC4B !!</string>
+    <string name="your_tasks_today">Your Tasks For Today</string>
+    <string name="new_task">New Task</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_body">Task Body</string>
+    <string name="save_task">Save Task</string>
+    <string name="no_task">No Tasks Added</string>
+    <string name="update_task">Update Task</string>
+</resources>
