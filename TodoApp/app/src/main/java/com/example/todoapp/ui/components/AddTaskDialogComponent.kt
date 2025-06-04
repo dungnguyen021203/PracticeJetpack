@@ -26,13 +26,15 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 
 import com.example.todoapp.R
+import com.example.todoapp.ui.state.TaskScreenUiState
 
 @Composable
 fun AddTaskDialogComponent(
     setTaskTitle: (String) -> Unit,
     setTaskBody: (String) -> Unit,
     saveTask: () -> Unit,
-    closeDialog: () -> Unit
+    closeDialog: () -> Unit,
+    uiState: TaskScreenUiState
 ) {
     Dialog(onDismissRequest = { closeDialog() }) {
         Surface(
@@ -54,7 +56,7 @@ fun AddTaskDialogComponent(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     OutlinedTextField(
-                        value = "",
+                        value = uiState.currentTextFieldTitle,
                         onValueChange = { title ->
                             setTaskTitle(title)
                         },
@@ -73,7 +75,7 @@ fun AddTaskDialogComponent(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     OutlinedTextField(
-                        value = "",
+                        value = uiState.currentTextFieldBody,
                         onValueChange = { body ->
                             setTaskBody(body)
                         },
@@ -100,7 +102,7 @@ fun AddTaskDialogComponent(
                                 saveTask()
                                 setTaskTitle("")
                                 setTaskBody("")
-                                closeDialog
+                                closeDialog()
                             }, modifier = Modifier.padding(horizontal = 12.dp),
                             colors = ButtonDefaults.buttonColors(
                                 containerColor = Color.Black,

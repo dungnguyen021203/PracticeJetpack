@@ -15,7 +15,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,6 +26,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.todoapp.data.model.Task
 
 import com.example.todoapp.R
+import com.example.todoapp.ui.state.TaskScreenUiState
 
 @Composable
 fun UpdateTaskDialogComponent(
@@ -35,6 +35,7 @@ fun UpdateTaskDialogComponent(
     saveTask: () -> Unit,
     closeDialog: () -> Unit,
     task: Task?,
+    uiState: TaskScreenUiState,
 ) {
     Dialog(onDismissRequest = { closeDialog() }) {
         Surface(
@@ -60,12 +61,12 @@ fun UpdateTaskDialogComponent(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     OutlinedTextField(
-                        value = "",
+                        value = uiState.currentTextFieldTitle,
                         onValueChange = { title ->
                             setTaskTitle(title)
                         },
                         label = { Text(stringResource(R.string.task_title)) },
-                        placeholder = { Text(task?.title.toString() ?: "") },
+                        placeholder = { Text(task?.title.toString()) },
                         colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = Color.Black,
                             unfocusedBorderColor = Color.Black,
@@ -80,7 +81,7 @@ fun UpdateTaskDialogComponent(
                     Spacer(modifier = Modifier.height(12.dp))
 
                     OutlinedTextField(
-                        value = "",
+                        value = uiState.currentTextFieldBody,
                         onValueChange = { body ->
                             setTaskBody(body)
                         },

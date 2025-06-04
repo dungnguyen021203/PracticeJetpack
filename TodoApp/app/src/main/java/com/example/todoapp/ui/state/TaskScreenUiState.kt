@@ -12,6 +12,4 @@ data class TaskScreenUiState(
     val isShowUpdateTaskDialog: Boolean = false,
     val currentTextFieldTitle: String = "",
     val currentTextFieldBody: String = "",
-) {
-
-}
+)

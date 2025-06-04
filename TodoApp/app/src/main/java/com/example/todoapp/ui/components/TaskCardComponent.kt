@@ -2,6 +2,7 @@ package com.example.todoapp.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.data.model.Task
@@ -34,45 +36,67 @@ fun TaskCardComponent(
             .padding(bottom = 8.dp),
         shape = RoundedCornerShape(8.dp)
     ) {
-        Column {
-            Text(
-                text = task.title,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Start
-            )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column {
+                Text(
+                    text = task.title,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Start
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = task.body,
-                fontWeight = FontWeight.Normal,
-                textAlign = TextAlign.Start
-            )
+                Text(
+                    text = task.body,
+                    fontWeight = FontWeight.Normal,
+                    textAlign = TextAlign.Start
+                )
 
-            Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = task.createdAt,
-                fontWeight = FontWeight.Light,
-                textAlign = TextAlign.Start
-            )
-        }
-
-        Column(verticalArrangement = Arrangement.SpaceAround) {
-            IconButton(onClick = {deleteTask(task.taskId)}) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "Delete"
+                Text(
+                    text = task.createdAt,
+                    fontWeight = FontWeight.Light,
+                    textAlign = TextAlign.Start
                 )
             }
 
-            IconButton(onClick = {updateTask(task)}) {
-                Icon(
-                    imageVector = Icons.Filled.Create,
-                    contentDescription = "Create"
-                )
+            Column(verticalArrangement = Arrangement.SpaceAround) {
+                IconButton(onClick = { deleteTask(task.taskId) }) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = "Delete"
+                    )
+                }
+
+                IconButton(onClick = { updateTask(task) }) {
+                    Icon(
+                        imageVector = Icons.Filled.Create,
+                        contentDescription = "Create"
+                    )
+                }
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun TaskCardComponentPreview() {
+    TaskCardComponent(
+        deleteTask = { /* Do nothing for preview */ },
+        updateTask = { /* Do nothing for preview */ },
+        task = Task(
+            taskId = "123",
+            title = "Preview Task",
+            body = "This is a preview of the task body.",
+            createdAt = "2025-05-31"
+        )
+    )
 }
