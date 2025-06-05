@@ -18,19 +18,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.example.snappyshop.AppUtil
 import com.example.snappyshop.R
+import com.example.snappyshop.viewmodel.AuthViewModel
 
 @Composable
-fun SignupScreen(modifier: Modifier = Modifier) {
+fun SignupScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    authViewModel: AuthViewModel = viewModel()
+) {
 
     var email by remember {
         mutableStateOf("")
@@ -43,6 +51,12 @@ fun SignupScreen(modifier: Modifier = Modifier) {
     var password by remember {
         mutableStateOf("")
     }
+
+    var isLoading by remember {
+        mutableStateOf(false)
+    }
+
+    var context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -70,7 +84,10 @@ fun SignupScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Image(painter = painterResource(id = R.drawable.nguyenquangdung), contentDescription = "AuthScreenPicture")
+        Image(
+            painter = painterResource(id = R.drawable.nguyenquangdung),
+            contentDescription = "AuthScreenPicture"
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -114,15 +131,28 @@ fun SignupScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Button(onClick = {}, modifier = Modifier.fillMaxWidth().height(60.dp)) {
-            Text(text = "Sign Up", fontSize = 22.sp)
+        Button(
+            onClick = {
+                isLoading = true
+                authViewModel.signup(email, name, password) { success, errorMessage ->
+                    if (success) {
+                        isLoading = false
+                        navController.navigate("home") {
+                            popUpTo("auth") { inclusive = true }
+                        }
+                    } else {
+                        isLoading = false
+                        AppUtil.showToast(context, errorMessage ?: "Something went wrong")
+                    }
+                }
+            },
+            enabled = !isLoading,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+        ) {
+            Text(text = if (isLoading) "Creating account" else "Sign Up", fontSize = 22.sp)
         }
 
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SignupScreenPreview() {
-    SignupScreen()
 }
