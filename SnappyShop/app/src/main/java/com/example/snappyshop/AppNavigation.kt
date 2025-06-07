@@ -3,14 +3,13 @@ package com.example.snappyshop
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
-import androidx.navigation.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.snappyshop.pages.CategoryProductPage
 import com.example.snappyshop.components.ProductDetailsView
+import com.example.snappyshop.pages.CheckOutPage
 import com.example.snappyshop.screen.AuthScreen
 import com.example.snappyshop.screen.HomeScreen
 import com.example.snappyshop.screen.LoginScreen
@@ -52,6 +51,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable("product-details/{productId}") {
             var productId = it.arguments?.getString("productId")
             ProductDetailsView(modifier, productId?:"")
+        }
+
+        composable("checkout") {
+            CheckOutPage(modifier)
         }
     }
 }
