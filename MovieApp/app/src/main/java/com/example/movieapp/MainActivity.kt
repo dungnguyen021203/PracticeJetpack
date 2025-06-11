@@ -11,7 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.example.movieapp.ui.home.HomeScreen
+import com.example.movieapp.ui.navigation.MovieNavigationGraph
 import com.example.movieapp.ui.theme.MovieAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,8 +24,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MovieAppTheme {
-                HomeScreen {  }
+                App()
             }
+        }
+    }
+
+    @Composable
+    fun App() {
+        val navController = rememberNavController()
+        Scaffold(modifier = Modifier.fillMaxSize()) {
+            MovieNavigationGraph(navController = navController, modifier = Modifier.padding(it))
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.movieapp.movie_detail.data.repository_impl
 
+import android.util.Log
 import com.example.movieapp.movie.common.data.ApiMapper
 import com.example.movieapp.movie.data.remote.models.MovieDto
 import com.example.movieapp.movie.domain.models.Movie

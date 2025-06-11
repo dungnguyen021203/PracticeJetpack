@@ -81,7 +81,6 @@ class DetailViewModel @Inject constructor(
         }
     }
 
-
 }
 
 data class DetailState(
