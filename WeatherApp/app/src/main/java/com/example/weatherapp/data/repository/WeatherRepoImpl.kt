@@ -1,6 +1,7 @@
 package com.example.weatherapp.data.repository
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.weatherapp.data.mappers.toWeatherInfo
 import com.example.weatherapp.data.remote.WeatherApi
@@ -17,11 +18,12 @@ class WeatherRepoImpl @Inject constructor(
         long: Double,
         lat: Double
     ): Resource<WeatherInfo> {
+        Log.d("WeatherRepoImpl", "Fetching weather data for lat: $lat, long: $long")
         return try {
             Resource.Success(
                 data = api.getWeatherData(
+                    long = long,
                     lat = lat,
-                    long = long
                 ).toWeatherInfo()
             )
         } catch (e: Exception) {
