@@ -5,8 +5,11 @@ import android.content.Context
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.widget.Toast
+import androidx.compose.ui.text.toUpperCase
+import com.example.snappyshop.model.Order
 import com.example.snappyshop.zalopay.Api.CreateOrder
 import com.google.firebase.Firebase
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
@@ -18,6 +21,7 @@ import vn.zalopay.sdk.ZaloPaySDK
 import vn.zalopay.sdk.listeners.PayOrderListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 
 object AppUtil {
@@ -70,6 +74,33 @@ object AppUtil {
                             showToast(context, "Item removed successfully")
                         } else {
                             showToast(context, "Failed remove")
+                        }
+                    }
+            }
+        }
+    }
+
+    fun clearCartAndAddToOrder() {
+        val userDoc = Firebase.firestore.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser?.uid!!)
+
+        userDoc.get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                val currentCart = it.result.get("cartItems") as? Map<String, Long> ?: emptyMap()
+
+                val order = Order(
+                    id = "ORD" + UUID.randomUUID().toString().replace("-", "").take(10).uppercase(),
+                    userId = FirebaseAuth.getInstance().currentUser?.uid!!,
+                    date = Timestamp.now(),
+                    items = currentCart,
+                    status = "ORDERED",
+                    address = it.result.get("address") as String
+                )
+
+                Firebase.firestore.collection("orders").document(order.id).set(order)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            userDoc.update("cartItems", FieldValue.delete())
                         }
                     }
             }

@@ -2,6 +2,7 @@ package com.example.snappyshop.pages
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +35,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("ContextCastToActivity")
 @Composable
 fun CheckOutPage(modifier: Modifier = Modifier) {
@@ -153,7 +156,19 @@ fun CheckOutPage(modifier: Modifier = Modifier) {
             onClick = {
                 AppUtil.startPayment(activity, total.value) { result ->
                     when (result) {
-                        is AppUtil.PaymentResult.Success  -> AppUtil.showToast(activity, "Thanh toán thành công")
+                        is AppUtil.PaymentResult.Success  -> {
+                            val builder = AlertDialog.Builder(activity)
+                            builder.setTitle("Payment Successful")
+                                .setMessage("Thank you! Your payment was ordered successfully and your order has been placed")
+                                .setPositiveButton("OK") { _, _ ->
+                                    val navController = GlobalNavigation.navController
+                                    navController.popBackStack()
+                                    navController.navigate("home")
+                                }
+                                .setCancelable(false)
+                                .show()
+                            AppUtil.clearCartAndAddToOrder()
+                        }
                         is AppUtil.PaymentResult.Canceled -> AppUtil.showToast(activity, "Đã hủy thanh toán")
                         is AppUtil.PaymentResult.Error    -> AppUtil.showToast(activity, "Có lỗi xảy ra")
                     }
