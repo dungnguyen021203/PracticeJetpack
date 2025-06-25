@@ -1,5 +1,6 @@
 package com.example.snappyshop.components
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,7 +36,7 @@ fun HeaderView(modifier: Modifier = Modifier) {
         Firebase.firestore.collection("users")
             .document(FirebaseAuth.getInstance().currentUser?.uid!!)
             .get().addOnCompleteListener {
-                name = it.result.get("name").toString().split("")[0]
+                name = it.result.get("name").toString()
             }
     }
 
