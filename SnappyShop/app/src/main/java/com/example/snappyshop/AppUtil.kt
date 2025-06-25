@@ -1,11 +1,24 @@
 package com.example.snappyshop
 
+import android.app.Activity
 import android.content.Context
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
 import android.widget.Toast
+import com.example.snappyshop.zalopay.Api.CreateOrder
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import vn.zalopay.sdk.Environment
+import vn.zalopay.sdk.ZaloPayError
+import vn.zalopay.sdk.ZaloPaySDK
+import vn.zalopay.sdk.listeners.PayOrderListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
 
 object AppUtil {
     fun showToast(context: Context, message: String) {
@@ -70,4 +83,76 @@ object AppUtil {
     fun getTaxPercentage() : Float {
         return 13.0f
     }
+
+    sealed class PaymentResult {
+        object Success : PaymentResult()
+        object Canceled : PaymentResult()
+        data class Error(val error: ZaloPayError?) : PaymentResult()
+    }
+
+    fun startPayment(
+        activity: Activity,
+        amount: Float,
+        callback: (PaymentResult) -> Unit
+    ) {
+
+        // Cho phép gọi API sync trong thread hiện tại (demo)
+        StrictMode.setThreadPolicy(ThreadPolicy.Builder().permitAll().build())
+
+        // Khởi tạo SDK (gọi một lần cho cả app, đặt ở Application càng tốt)
+        ZaloPaySDK.init(2553, Environment.SANDBOX)
+
+        // Tạo đơn hàng (API riêng của bạn)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val orderApi = CreateOrder()
+                val data = orderApi.createOrder("%.0f".format(amount))
+                if (data.getString("return_code") == "1") {
+                    val token = data.getString("zp_trans_token")
+
+                    // Chuyển về Main thread để gọi SDK
+                    withContext(Dispatchers.Main) {
+                        ZaloPaySDK.getInstance().payOrder(
+                            activity,
+                            token,
+                            "demozpdk://app",
+                            object : PayOrderListener {
+                                override fun onPaymentSucceeded(
+                                    transactionId: String?,
+                                    transToken: String?,
+                                    appTransId: String?
+                                ) {
+                                    callback(PaymentResult.Success)
+                                }
+
+                                override fun onPaymentCanceled(
+                                    transToken: String?,
+                                    appTransId: String?
+                                ) {
+                                    callback(PaymentResult.Canceled)
+                                }
+
+                                override fun onPaymentError(
+                                    zaloPayError: ZaloPayError?,
+                                    transToken: String?,
+                                    appTransId: String?
+                                ) {
+                                    callback(PaymentResult.Error(zaloPayError))
+                                }
+                            }
+                        )
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        callback(PaymentResult.Error(null))
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    callback(PaymentResult.Error(null))
+                }
+            }
+        }
+    }
+
 }

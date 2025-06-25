@@ -1,5 +1,7 @@
 package com.example.snappyshop.pages
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +20,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -30,6 +33,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
 
+@SuppressLint("ContextCastToActivity")
 @Composable
 fun CheckOutPage(modifier: Modifier = Modifier) {
 
@@ -56,6 +60,8 @@ fun CheckOutPage(modifier: Modifier = Modifier) {
     val total = remember {
         mutableStateOf(0f)
     }
+
+    val activity = LocalContext.current as Activity
 
 //    fun calculateAndAssign() {
 //        productList.forEach {
@@ -144,7 +150,15 @@ fun CheckOutPage(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = {  },
+            onClick = {
+                AppUtil.startPayment(activity, total.value) { result ->
+                    when (result) {
+                        is AppUtil.PaymentResult.Success  -> AppUtil.showToast(activity, "Thanh toán thành công")
+                        is AppUtil.PaymentResult.Canceled -> AppUtil.showToast(activity, "Đã hủy thanh toán")
+                        is AppUtil.PaymentResult.Error    -> AppUtil.showToast(activity, "Có lỗi xảy ra")
+                    }
+                }
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
