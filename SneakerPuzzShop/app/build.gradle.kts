@@ -6,7 +6,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     kotlin("kapt")
 
-    id("com.google.gms.google-services")
+    alias(libs.plugins.gms.google.services)
 }
 
 android {
@@ -86,6 +86,10 @@ dependencies {
     implementation(libs.firebase.bom)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(platform(libs.firebase.bom))
 
     // DotIndicator
     implementation("com.tbuonomo:dotsindicator:5.1.0")

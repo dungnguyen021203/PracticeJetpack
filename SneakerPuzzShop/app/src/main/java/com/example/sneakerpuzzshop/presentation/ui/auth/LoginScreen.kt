@@ -37,6 +37,7 @@ fun LoginScreen(viewModel: AuthViewModel?, navController: NavController) {
     var passwordVisible by remember { mutableStateOf(false) }
 
     var authResource = viewModel?.loginFlow?.collectAsState()
+    val googleLoginState = viewModel?.googleLoginFlow?.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
 
@@ -125,6 +126,20 @@ fun LoginScreen(viewModel: AuthViewModel?, navController: NavController) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        OutlinedButton(onClick = {
+            viewModel?.loginWithGoogle()
+        }) {
+            Text(
+                text = "Sign In With Google",
+                fontSize = 16.sp,
+                modifier = Modifier.padding(
+                    horizontal = 24.dp, vertical = 4.dp
+                )
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             modifier = Modifier
                 .clickable {
@@ -143,6 +158,22 @@ fun LoginScreen(viewModel: AuthViewModel?, navController: NavController) {
                 is Resource.Failure -> {
                     ShowToast(message = it.exception.message.toString())
                 }
+                is Resource.Loading -> {
+                    CircularProgressIndicator()
+                }
+                is Resource.Success -> {
+                    LaunchedEffect(Unit) {
+                        navController.navigate(ROUTE_HOME) {
+                            popUpTo(ROUTE_LOGIN) { inclusive = true }
+                        }
+                    }
+                }
+            }
+        }
+
+        googleLoginState?.value?.let {
+            when(it) {
+                is Resource.Failure -> ShowToast(message = it.exception.message.toString())
                 is Resource.Loading -> {
                     CircularProgressIndicator()
                 }

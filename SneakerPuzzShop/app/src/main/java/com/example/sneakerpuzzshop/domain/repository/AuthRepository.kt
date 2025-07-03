@@ -10,5 +10,7 @@ interface AuthRepository {
 
     suspend fun signUp(email: String, name: String, password: String): Resource<FirebaseUser>
 
+    suspend fun loginWithGoogle(idToken: String): Resource<FirebaseUser>
+
     fun logOut()
 }
