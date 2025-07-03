@@ -5,6 +5,7 @@ import com.example.sneakerpuzzshop.domain.repository.AuthRepository
 import com.example.sneakerpuzzshop.domain.usecase.LoginUseCase
 import com.example.sneakerpuzzshop.domain.usecase.SignupUseCase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,6 +22,10 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideFirebaseFirestore() : FirebaseFirestore = FirebaseFirestore.getInstance()
+
+    @Provides
+    @Singleton
     fun provideAuthRepository(firebaseAuth: FirebaseAuth): AuthRepository {
         return AuthRepositoryImpl(firebaseAuth)
     }
@@ -33,7 +38,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSignupUseCase(authRepository: AuthRepository) : SignupUseCase {
-        return SignupUseCase(authRepository)
+    fun provideSignupUseCase(authRepository: AuthRepository, firestore: FirebaseFirestore) : SignupUseCase {
+        return SignupUseCase(authRepository, firestore)
     }
 }
