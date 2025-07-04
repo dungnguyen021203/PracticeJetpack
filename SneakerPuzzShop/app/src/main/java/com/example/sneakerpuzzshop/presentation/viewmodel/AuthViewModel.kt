@@ -5,11 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.sneakerpuzzshop.common.Resource
 import com.example.sneakerpuzzshop.domain.repository.AuthRepository
+import com.example.sneakerpuzzshop.domain.usecase.ForgetPasswordUseCase
 import com.example.sneakerpuzzshop.domain.usecase.GoogleLoginUseCase
 import com.example.sneakerpuzzshop.domain.usecase.LoginUseCase
 import com.example.sneakerpuzzshop.domain.usecase.SignupUseCase
 import com.example.sneakerpuzzshop.utils.GoogleSignInHelper
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +24,8 @@ class AuthViewModel @Inject constructor(
     private val signupUseCase: SignupUseCase,
     private val googleLoginUseCase: GoogleLoginUseCase,
     private val googleSignInHelper: GoogleSignInHelper,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val forgetPasswordUseCase: ForgetPasswordUseCase
 ) : ViewModel() {
 
     private val _loginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
@@ -35,6 +36,9 @@ class AuthViewModel @Inject constructor(
 
     private val _googleLoginFlow = MutableStateFlow<Resource<FirebaseUser>?>(null)
     val googleLoginFlow: StateFlow<Resource<FirebaseUser>?> = _googleLoginFlow.asStateFlow()
+
+    private val _resetPasswordFlow = MutableStateFlow<Resource<Unit>?>(null)
+    val resetPasswordFlow: StateFlow<Resource<Unit>?> = _resetPasswordFlow.asStateFlow()
 
     fun login(email: String, password: String) = viewModelScope.launch {
         _loginFlow.value = Resource.Loading
@@ -81,5 +85,11 @@ class AuthViewModel @Inject constructor(
         viewModelScope.launch {
             googleSignInHelper.clearGoogleCredentialState()
         }
+    }
+
+    fun resetPassword(email: String) = viewModelScope.launch {
+        _resetPasswordFlow.value = Resource.Loading
+        val result = forgetPasswordUseCase(email)
+        _resetPasswordFlow.value = result
     }
 }

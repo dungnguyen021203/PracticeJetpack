@@ -6,13 +6,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.sneakerpuzzshop.presentation.ui.auth.ForgetPasswordScreen
 import com.example.sneakerpuzzshop.presentation.ui.auth.LoginScreen
 import com.example.sneakerpuzzshop.presentation.ui.auth.SignupScreen
 import com.example.sneakerpuzzshop.presentation.ui.home.HomeScreen
 import com.example.sneakerpuzzshop.presentation.viewmodel.AuthViewModel
-import com.example.sneakerpuzzshop.utils.ROUTE_HOME
-import com.example.sneakerpuzzshop.utils.ROUTE_LOGIN
-import com.example.sneakerpuzzshop.utils.ROUTE_SIGNUP
+import com.example.sneakerpuzzshop.utils.*
 
 @Composable
 fun AppNavHost(
@@ -35,5 +34,9 @@ fun AppNavHost(
         composable(ROUTE_HOME) {
             HomeScreen(viewModel, navController)
         }
+        composable(ROUTE_FORGET_PW) {
+            ForgetPasswordScreen(viewModel, navController)
+        }
+
     }
 }

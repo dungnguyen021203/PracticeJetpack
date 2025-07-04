@@ -26,6 +26,7 @@ import com.example.sneakerpuzzshop.common.Resource
 import com.example.sneakerpuzzshop.presentation.components.AuthHeader
 import com.example.sneakerpuzzshop.presentation.components.ShowToast
 import com.example.sneakerpuzzshop.presentation.viewmodel.AuthViewModel
+import com.example.sneakerpuzzshop.utils.LoadingCircle
 import com.example.sneakerpuzzshop.utils.ROUTE_HOME
 import com.example.sneakerpuzzshop.utils.ROUTE_LOGIN
 import com.example.sneakerpuzzshop.utils.ROUTE_SIGNUP
@@ -159,6 +160,7 @@ fun SignupScreen(viewModel: AuthViewModel?, navController: androidx.navigation.N
                 .clickable {
                     navController.navigate(ROUTE_LOGIN) {
                         popUpTo(ROUTE_SIGNUP) { inclusive = true }
+                        launchSingleTop = true
                     }
                 },
             text = "Already have an account",
@@ -173,7 +175,7 @@ fun SignupScreen(viewModel: AuthViewModel?, navController: androidx.navigation.N
                     ShowToast(message = it.exception.message.toString())
                 }
                 is Resource.Loading -> {
-                    CircularProgressIndicator()
+                    LoadingCircle()
                 }
                 is Resource.Success -> {
                     LaunchedEffect(Unit) {

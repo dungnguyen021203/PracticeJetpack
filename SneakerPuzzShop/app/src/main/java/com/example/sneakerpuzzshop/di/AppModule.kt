@@ -3,6 +3,7 @@ package com.example.sneakerpuzzshop.di
 import android.content.Context
 import com.example.sneakerpuzzshop.data.repository.AuthRepositoryImpl
 import com.example.sneakerpuzzshop.domain.repository.AuthRepository
+import com.example.sneakerpuzzshop.domain.usecase.ForgetPasswordUseCase
 import com.example.sneakerpuzzshop.domain.usecase.GoogleLoginUseCase
 import com.example.sneakerpuzzshop.domain.usecase.LoginUseCase
 import com.example.sneakerpuzzshop.domain.usecase.SignupUseCase
@@ -58,5 +59,11 @@ object AppModule {
     @Singleton
     fun provideGoogleLoginUseCase(authRepository: AuthRepository, firestore: FirebaseFirestore) : GoogleLoginUseCase {
         return GoogleLoginUseCase(authRepository, firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideForgetPasswordUseCase(authRepository: AuthRepository) : ForgetPasswordUseCase {
+        return ForgetPasswordUseCase(authRepository)
     }
 }
