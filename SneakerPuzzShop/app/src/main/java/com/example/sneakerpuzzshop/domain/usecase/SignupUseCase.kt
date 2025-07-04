@@ -16,6 +16,15 @@ class SignupUseCase @Inject constructor(
         if (name.isBlank() || email.isBlank() || password.isBlank())
             return Resource.Failure(Exception("Không để trống các mục"))
 
+        val userSnapshot = firestore.collection("users")
+            .whereEqualTo("email", email)
+            .get()
+            .await()
+
+        if (!userSnapshot.isEmpty) {
+            return Resource.Failure(Exception("Email đã được đăng ký"))
+        }
+
         val result =  authRepository.signUp(email, name, password)
         if (result is Resource.Success) {
             val user = result.data
