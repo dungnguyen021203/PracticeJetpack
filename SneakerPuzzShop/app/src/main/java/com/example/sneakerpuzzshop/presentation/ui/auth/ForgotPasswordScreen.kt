@@ -139,6 +139,7 @@ fun ForgetPasswordScreen(viewModel: AuthViewModel, navController: NavHostControl
                     navController.navigate(ROUTE_LOGIN) {
                         popUpTo(ROUTE_FORGET_PW) { inclusive = true }
                     }
+                    viewModel.clearResetPasswordFlow()
                 }
             }
         }
