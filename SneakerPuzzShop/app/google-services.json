@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "266202000854",
+    "project_id": "sneakerpuzzshop",
+    "storage_bucket": "sneakerpuzzshop.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:266202000854:android:7f8eccb65e1f858c96c877",
+        "android_client_info": {
+          "package_name": "com.example.sneakerpuzzshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "266202000854-j49me8l1g7uujug2slvjpu025bl7n250.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.sneakerpuzzshop",
+            "certificate_hash": "062d1ae569656fbba79726abffc8cda128810bcf"
+          }
+        },
+        {
+          "client_id": "266202000854-r5ri6v2c8p7mv4lecpqio8u4f06aq9s8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKGp6jC5zCMCoucj2SEJG8MPXMB418N3g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "266202000854-r5ri6v2c8p7mv4lecpqio8u4f06aq9s8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
