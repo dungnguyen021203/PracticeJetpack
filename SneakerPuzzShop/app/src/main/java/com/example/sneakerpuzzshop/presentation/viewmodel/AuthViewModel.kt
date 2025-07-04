@@ -40,6 +40,9 @@ class AuthViewModel @Inject constructor(
     private val _resetPasswordFlow = MutableStateFlow<Resource<Unit>?>(null)
     val resetPasswordFlow: StateFlow<Resource<Unit>?> = _resetPasswordFlow.asStateFlow()
 
+    val currentUser: FirebaseUser?
+        get() = authRepository.currentUser
+
     fun login(email: String, password: String) = viewModelScope.launch {
         _loginFlow.value = Resource.Loading
         val result = loginUseCase(email, password)
