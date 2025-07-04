@@ -1,12 +1,9 @@
 package com.example.sneakerpuzzshop.presentation.components
 
 
+import android.content.Context
 import android.widget.Toast
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 
-@Composable
-fun ShowToast(message: String) {
-    val context = LocalContext.current
+fun showToast(context: Context, message: String) {
     Toast.makeText(context, message, Toast.LENGTH_LONG).show()
 }

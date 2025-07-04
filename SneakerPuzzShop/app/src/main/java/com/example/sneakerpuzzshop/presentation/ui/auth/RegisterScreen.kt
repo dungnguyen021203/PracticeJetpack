@@ -13,24 +13,22 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import com.example.sneakerpuzzshop.R
 import com.example.sneakerpuzzshop.common.Resource
 import com.example.sneakerpuzzshop.presentation.components.AuthHeader
-import com.example.sneakerpuzzshop.presentation.components.ShowToast
+import com.example.sneakerpuzzshop.presentation.components.showToast
 import com.example.sneakerpuzzshop.presentation.viewmodel.AuthViewModel
 import com.example.sneakerpuzzshop.utils.LoadingCircle
 import com.example.sneakerpuzzshop.utils.ROUTE_HOME
 import com.example.sneakerpuzzshop.utils.ROUTE_LOGIN
 import com.example.sneakerpuzzshop.utils.ROUTE_SIGNUP
-import com.example.sneakerpuzzshop.utils.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,6 +39,8 @@ fun SignupScreen(viewModel: AuthViewModel?, navController: androidx.navigation.N
     var passwordVisible by remember { mutableStateOf(false) }
 
     val authResource = viewModel?.signUpFlow?.collectAsState()
+
+    val context = LocalContext.current
 
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         AuthHeader()
@@ -172,7 +172,10 @@ fun SignupScreen(viewModel: AuthViewModel?, navController: androidx.navigation.N
         authResource?.value?.let {
             when(it) {
                 is Resource.Failure -> {
-                    ShowToast(message = it.exception.message.toString())
+                    LaunchedEffect(it) {
+                        showToast(context = context, message = it.exception.message.toString())
+                        viewModel.clearSignUpFlow()
+                    }
                 }
                 is Resource.Loading -> {
                     LoadingCircle()

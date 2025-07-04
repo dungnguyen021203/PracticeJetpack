@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,7 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.sneakerpuzzshop.common.Resource
 import com.example.sneakerpuzzshop.presentation.components.AuthHeader
-import com.example.sneakerpuzzshop.presentation.components.ShowToast
+import com.example.sneakerpuzzshop.presentation.components.showToast
 import com.example.sneakerpuzzshop.presentation.viewmodel.AuthViewModel
 import com.example.sneakerpuzzshop.utils.LoadingCircle
 import com.example.sneakerpuzzshop.utils.*
@@ -50,6 +49,8 @@ fun ForgetPasswordScreen(viewModel: AuthViewModel, navController: NavHostControl
     var email by remember { mutableStateOf("") }
 
     val passwordResetState = viewModel.resetPasswordFlow.collectAsState()
+
+    val context = LocalContext.current
 
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         AuthHeader()
@@ -125,11 +126,16 @@ fun ForgetPasswordScreen(viewModel: AuthViewModel, navController: NavHostControl
 
     passwordResetState.value?.let {
         when (it) {
-            is Resource.Failure -> ShowToast(message = it.exception.message.toString())
+            is Resource.Failure -> {
+                LaunchedEffect(it) {
+                    showToast(context = context, message = it.exception.message.toString())
+                    viewModel.clearResetPasswordFlow()
+                }
+            }
             Resource.Loading -> LoadingCircle()
             is Resource.Success -> {
-                ShowToast(message = "Kiểm tra email của bạn")
                 LaunchedEffect(Unit) {
+                    showToast(context = context, message = "Kiểm tra email của bạn")
                     navController.navigate(ROUTE_LOGIN) {
                         popUpTo(ROUTE_FORGET_PW) { inclusive = true }
                     }

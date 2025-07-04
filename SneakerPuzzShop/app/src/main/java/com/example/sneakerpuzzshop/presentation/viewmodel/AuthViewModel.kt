@@ -92,4 +92,20 @@ class AuthViewModel @Inject constructor(
         val result = forgetPasswordUseCase(email)
         _resetPasswordFlow.value = result
     }
+
+    fun clearLoginFlow() {
+        _loginFlow.value = null
+    }
+
+    fun clearSignUpFlow() {
+        _signUpFlow.value = null
+    }
+
+    fun clearResetPasswordFlow() {
+        _resetPasswordFlow.value = null
+    }
+
+    fun clearGoogleSignUpFLow() {
+        _googleLoginFlow.value = null
+    }
 }

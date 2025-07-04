@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Transparent
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
@@ -23,12 +24,12 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.sneakerpuzzshop.common.Resource
 import com.example.sneakerpuzzshop.presentation.components.AuthHeader
-import com.example.sneakerpuzzshop.presentation.components.ShowToast
 import com.example.sneakerpuzzshop.presentation.viewmodel.AuthViewModel
 import com.example.sneakerpuzzshop.utils.ROUTE_HOME
 import com.example.sneakerpuzzshop.utils.ROUTE_LOGIN
 import com.example.sneakerpuzzshop.utils.ROUTE_SIGNUP
 import com.example.sneakerpuzzshop.R
+import com.example.sneakerpuzzshop.presentation.components.showToast
 import com.example.sneakerpuzzshop.utils.LoadingCircle
 import com.example.sneakerpuzzshop.utils.ROUTE_FORGET_PW
 
@@ -42,6 +43,8 @@ fun LoginScreen(viewModel: AuthViewModel?, navController: NavController) {
 
     var authResource = viewModel?.loginFlow?.collectAsState()
     val googleLoginState = viewModel?.googleLoginFlow?.collectAsState()
+
+    val context = LocalContext.current
 
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
 
@@ -187,7 +190,10 @@ fun LoginScreen(viewModel: AuthViewModel?, navController: NavController) {
         authResource?.value?.let {
             when (it) {
                 is Resource.Failure -> {
-                    ShowToast(message = it.exception.message.toString())
+                    LaunchedEffect(it) {
+                        showToast(context = context, message = it.exception.message.toString())
+                        viewModel?.clearLoginFlow()
+                    }
                 }
 
                 is Resource.Loading -> {
@@ -206,7 +212,12 @@ fun LoginScreen(viewModel: AuthViewModel?, navController: NavController) {
 
         googleLoginState?.value?.let {
             when (it) {
-                is Resource.Failure -> ShowToast(message = it.exception.message.toString())
+                is Resource.Failure -> {
+                    LaunchedEffect(it) {
+                        showToast(context = context, message = it.exception.message.toString())
+                        viewModel.clearGoogleSignUpFLow()
+                    }
+                }
                 is Resource.Loading -> {
                     LoadingCircle()
                 }
