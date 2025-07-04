@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -76,7 +77,7 @@ fun ForgetPasswordScreen(viewModel: AuthViewModel, navController: NavHostControl
                 Text(text = "Email")
             },
             leadingIcon = {
-                Icon(Icons.Rounded.AccountCircle, contentDescription = "Account Leading Icon")
+                Icon(Icons.Rounded.Email, contentDescription = "Account Leading Icon")
             },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,

@@ -63,7 +63,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideForgetPasswordUseCase(authRepository: AuthRepository) : ForgetPasswordUseCase {
-        return ForgetPasswordUseCase(authRepository)
+    fun provideForgetPasswordUseCase(authRepository: AuthRepository, firestore: FirebaseFirestore) : ForgetPasswordUseCase {
+        return ForgetPasswordUseCase(authRepository, firestore)
     }
 }
