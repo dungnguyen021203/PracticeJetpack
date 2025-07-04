@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -63,7 +64,7 @@ fun LoginScreen(viewModel: AuthViewModel?, navController: NavController) {
                 Text(text = "Email")
             },
             leadingIcon = {
-                Icon(Icons.Rounded.AccountCircle, contentDescription = "Account Leading Icon")
+                Icon(Icons.Rounded.Email, contentDescription = "Account Leading Icon")
             },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.None,
