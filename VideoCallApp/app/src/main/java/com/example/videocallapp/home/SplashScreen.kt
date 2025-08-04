@@ -16,6 +16,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.videocallapp.R
+import com.example.videocallapp.helper.AuthHeader
 import com.example.videocallapp.viewmodel.AuthViewModel
 import kotlinx.coroutines.delay
 
@@ -39,18 +40,6 @@ fun SplashScreen(viewModel: AuthViewModel = hiltViewModel(), navController: NavH
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.login_animation))
-
-        val progress by animateLottieCompositionAsState(
-            isPlaying = true,
-            composition = composition,
-            speed = 0.7f
-        )
-
-        LottieAnimation(
-            modifier = Modifier.size(250.dp),
-            composition = composition,
-            progress = {progress}
-        )
+        AuthHeader()
     }
 }

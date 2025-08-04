@@ -2,7 +2,6 @@ package com.example.videocallapp.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,15 +45,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.videocallapp.R
-import com.example.videocallapp.viewmodel.AuthViewModel
 import com.example.videocallapp.common.Resource
+import com.example.videocallapp.helper.AuthHeader
 import com.example.videocallapp.helper.LoadingCircle
 import com.example.videocallapp.helper.showToast
+import com.example.videocallapp.viewmodel.AuthViewModel
 
 @Composable
 fun SignupScreen(viewModel: AuthViewModel? = hiltViewModel(), navController: NavHostController) {
@@ -72,24 +68,7 @@ fun SignupScreen(viewModel: AuthViewModel? = hiltViewModel(), navController: Nav
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.login_animation))
-
-            val progress by animateLottieCompositionAsState(
-                isPlaying = true,
-                composition = composition,
-                speed = 0.7f
-            )
-
-            LottieAnimation(
-                modifier = Modifier.size(250.dp),
-                composition = composition,
-                progress = {progress}
-            )
-        }
+        AuthHeader()
 
         Text(
             text = "Become SneakerPuzz Member",

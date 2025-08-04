@@ -53,12 +53,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.videocallapp.R
 import com.example.videocallapp.common.Resource
+import com.example.videocallapp.helper.AuthHeader
 import com.example.videocallapp.helper.LoadingCircle
 import com.example.videocallapp.helper.showToast
 import com.example.videocallapp.viewmodel.AuthViewModel
@@ -84,24 +81,7 @@ fun LoginScreen(viewModel: AuthViewModel? = hiltViewModel(), navController: NavH
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.login_animation))
-
-            val progress by animateLottieCompositionAsState(
-                isPlaying = true,
-                composition = composition,
-                speed = 0.7f
-            )
-
-            LottieAnimation(
-                modifier = Modifier.size(250.dp),
-                composition = composition,
-                progress = {progress}
-            )
-        }
+        AuthHeader()
 
         Text(text = "Welcome to SneakerPuzz ", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
 
