@@ -13,8 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
-import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -34,13 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,13 +52,10 @@ import com.example.videocallapp.helper.LoadingCircle
 import com.example.videocallapp.helper.showToast
 
 @Composable
-fun SignupScreen(viewModel: AuthViewModel? = hiltViewModel(), navController: NavHostController) {
-    var name by remember { mutableStateOf("") }
+fun ForgetPassword(viewModel: AuthViewModel = hiltViewModel(), navController: NavHostController) {
     var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
 
-    val authResource = viewModel?.signUpFlow?.collectAsState()
+    val passwordResetState = viewModel.resetPasswordFlow.collectAsState()
 
     val context = LocalContext.current
 
@@ -91,10 +83,12 @@ fun SignupScreen(viewModel: AuthViewModel? = hiltViewModel(), navController: Nav
             )
         }
 
+        Text(text = "Welcome to SneakerPuzz", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
+
         Text(
-            text = "Become SneakerPuzz Member",
-            fontSize = 24.sp,
-            fontWeight = FontWeight.ExtraBold
+            text = "Enter your email. We got you!!!",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium
         )
 
         TextField(
@@ -112,74 +106,8 @@ fun SignupScreen(viewModel: AuthViewModel? = hiltViewModel(), navController: Nav
                 capitalization = KeyboardCapitalization.None,
                 autoCorrectEnabled = false,
                 keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next,
+                imeAction = ImeAction.Done,
             ),
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp, horizontal = 20.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Transparent,
-                unfocusedIndicatorColor = Transparent
-            )
-        )
-
-        TextField(
-            value = name,
-            onValueChange = {
-                name = it
-            },
-            label = {
-                Text(text = "Name")
-            },
-            leadingIcon = {
-                Icon(Icons.Rounded.Person, contentDescription = "Name Leading Icon")
-            },
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.None,
-                autoCorrectEnabled = false,
-                keyboardType = KeyboardType.Text,
-                imeAction = ImeAction.Next,
-            ),
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp, horizontal = 20.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = Transparent,
-                unfocusedIndicatorColor = Transparent
-            )
-        )
-
-        TextField(
-            value = password,
-            onValueChange = {
-                password = it
-            },
-            label = {
-                Text(text = "Password")
-            },
-            leadingIcon = {
-                Icon(Icons.Rounded.Lock, contentDescription = "Password Leading Icon")
-            },
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.None,
-                autoCorrectEnabled = false,
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            ),
-            trailingIcon = {
-                val image = if (passwordVisible)
-                    painterResource(id = R.drawable.visible) else
-                    painterResource(id = R.drawable.visibility)
-                Icon(
-                    painter = image,
-                    contentDescription = "Password Trailing Icon",
-                    modifier = Modifier
-                        .size(24.dp)
-                        .clickable { passwordVisible = !passwordVisible })
-            },
             shape = RoundedCornerShape(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -192,7 +120,7 @@ fun SignupScreen(viewModel: AuthViewModel? = hiltViewModel(), navController: Nav
 
         Button(
             onClick = {
-                viewModel?.signUp(email, name, password)
+                viewModel.resetPassword(email)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -204,45 +132,44 @@ fun SignupScreen(viewModel: AuthViewModel? = hiltViewModel(), navController: Nav
                 contentColor = Color.White
             )
         ) {
-            Text(text = "Sign Up", style = MaterialTheme.typography.titleMedium)
+            Text(text = "Reset Password", style = MaterialTheme.typography.titleMedium)
         }
 
         Text(
             modifier = Modifier
                 .clickable {
                     navController.navigate("login") {
-                        popUpTo("signup") { inclusive = true }
+                        popUpTo("forget") { inclusive = true }
                         launchSingleTop = true
                     }
                 },
-            text = "Already have an account?",
+            text = "Back to Login",
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             color = Color.Gray
         )
+    }
 
-        authResource?.value?.let {
-            when (it) {
-                is Resource.Failure -> {
-                    LaunchedEffect(it) {
-                        showToast(context = context, message = it.exception.message.toString())
-                        viewModel.clearSignUpFlow()
-                    }
+    passwordResetState.value?.let {
+        when (it) {
+            is Resource.Failure -> {
+                LaunchedEffect(it) {
+                    showToast(context = context, message = it.exception.message.toString())
+                    viewModel.clearResetPasswordFlow()
                 }
+            }
 
-                is Resource.Loading -> {
-                    LoadingCircle()
-                }
-
-                is Resource.Success -> {
-                    LaunchedEffect(Unit) {
-                        navController.navigate("home") {
-                            popUpTo("signup") { inclusive = true }
-                        }
+            Resource.Loading -> LoadingCircle()
+            is Resource.Success -> {
+                LaunchedEffect(Unit) {
+                    showToast(context = context, message = "Kiểm tra email của bạn")
+                    navController.navigate("login") {
+                        popUpTo("forget") { inclusive = true }
                     }
+                    viewModel.clearResetPasswordFlow()
                 }
             }
         }
-    }
 
+    }
 }

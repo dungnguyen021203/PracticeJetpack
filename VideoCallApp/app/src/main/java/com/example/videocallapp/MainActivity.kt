@@ -16,6 +16,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.videocallapp.home.HomeScreen
+import com.example.videocallapp.home.SplashScreen
+import com.example.videocallapp.login.ForgetPassword
 import com.example.videocallapp.login.LoginScreen
 import com.example.videocallapp.login.SignupScreen
 import com.example.videocallapp.ui.theme.VideoCallAppTheme
@@ -40,16 +42,22 @@ class MainActivity : ComponentActivity() {
 fun AppNavHost() {
     val navController = rememberNavController()
     NavHost(
-        navController = navController, startDestination = "login"
+        navController = navController, startDestination = "splash"
     ) {
+        composable("splash") {
+            SplashScreen(navController = navController)
+        }
         composable("login") {
-            LoginScreen()
+            LoginScreen(navController = navController)
         }
         composable("signup") {
-            SignupScreen()
+            SignupScreen(navController = navController)
         }
         composable("home") {
             HomeScreen()
+        }
+        composable("forget") {
+            ForgetPassword(navController = navController)
         }
     }
 }
