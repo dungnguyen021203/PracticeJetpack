@@ -21,7 +21,9 @@ import com.example.videocallapp.login.ForgetPassword
 import com.example.videocallapp.login.LoginScreen
 import com.example.videocallapp.login.SignupScreen
 import com.example.videocallapp.ui.theme.VideoCallAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
