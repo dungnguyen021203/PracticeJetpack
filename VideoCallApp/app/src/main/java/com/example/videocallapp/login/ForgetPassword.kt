@@ -60,7 +60,7 @@ fun ForgetPassword(viewModel: AuthViewModel = hiltViewModel(), navController: Na
     ) {
         AuthHeader()
 
-        Text(text = "Welcome to SneakerPuzz", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
+        Text(text = "Welcome to VideoCalling", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
 
         Text(
             text = "Enter your email. We got you!!!",

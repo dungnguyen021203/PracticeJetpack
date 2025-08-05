@@ -83,7 +83,7 @@ fun LoginScreen(viewModel: AuthViewModel? = hiltViewModel(), navController: NavH
 
         AuthHeader()
 
-        Text(text = "Welcome to SneakerPuzz ", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
+        Text(text = "Welcome to VideoCalling", fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
 
         Spacer(modifier = Modifier.height(5.dp))
 

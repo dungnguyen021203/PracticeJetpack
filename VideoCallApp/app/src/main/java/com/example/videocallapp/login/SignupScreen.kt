@@ -71,7 +71,7 @@ fun SignupScreen(viewModel: AuthViewModel? = hiltViewModel(), navController: Nav
         AuthHeader()
 
         Text(
-            text = "Become SneakerPuzz Member",
+            text = "Become VideoCalling Member",
             fontSize = 24.sp,
             fontWeight = FontWeight.ExtraBold
         )

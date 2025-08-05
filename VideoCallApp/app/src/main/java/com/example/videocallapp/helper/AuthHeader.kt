@@ -13,7 +13,7 @@ import com.example.videocallapp.R
 
 @Composable
 fun AuthHeader(modifier: Modifier = Modifier) {
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.login_animation))
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.video_call))
 
     val progress by animateLottieCompositionAsState(
         isPlaying = true,
