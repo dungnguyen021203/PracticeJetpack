@@ -94,7 +94,8 @@ class MainActivity : FragmentActivity() {
         PermissionX.init(activityContext).permissions(permission.SYSTEM_ALERT_WINDOW)
             .onExplainRequestReason { scope, deniedList ->
                 val message =
-                    "We need your consent for the following permissions in order to use the offline call function properly"
+                    "We need your consent for the following permissions " +
+                            "in order to use the offline call function properly"
                 scope.showRequestReasonDialog(deniedList, message, "Allow", "Deny")
             }.request { allGranted, grantedList, deniedList -> }
     }
