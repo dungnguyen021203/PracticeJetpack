@@ -95,7 +95,8 @@ class MainActivity : FragmentActivity() {
             .onExplainRequestReason { scope, deniedList ->
                 val message =
                     "We need your consent for the following permissions " +
-                            "in order to use the offline call function properly"
+                            "in " +
+                            "order to use the offline call function properly"
                 scope.showRequestReasonDialog(deniedList, message, "Allow", "Deny")
             }.request { allGranted, grantedList, deniedList -> }
     }
